@@ -1,14 +1,14 @@
-import React from 'react';
-import { PricingTable } from '@/components/features/billing/PricingTable';
+import { BillingDashboard } from "@/components/features/billing/BillingDashboard"
 
 export default function BillingPage() {
     return (
-        <div className="min-h-screen bg-gray-50 py-12">
-            <div className="text-center mb-12">
-                <h1 className="text-4xl font-bold text-gray-900">Simple, Transparent Pricing</h1>
-                <p className="mt-4 text-xl text-gray-600">Choose the plan that fits your growth.</p>
+        <div className="space-y-6">
+            <div className="flex flex-col gap-2">
+                <h1 className="text-3xl font-bold tracking-tight text-foreground">Billing & Subscription</h1>
+                <p className="text-muted-foreground">Manage your plan, payment methods, and billing history.</p>
             </div>
-            <PricingTable />
+
+            <BillingDashboard />
         </div>
-    );
+    )
 }

@@ -1,11 +1,12 @@
 "use client"
 
 import React from "react"
-import { Check } from "lucide-react"
+import { Check, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { PlanDetails, useBillingStore } from "@/lib/store/billing-store"
 import { cn } from "@/lib/utils"
+import { toast } from "sonner"
 
 interface PricingCardProps {
     plan: PlanDetails
@@ -13,6 +14,7 @@ interface PricingCardProps {
 
 export const PricingCard = ({ plan }: PricingCardProps) => {
     const { currentPlan, upgradePlan, downgradePlan } = useBillingStore()
+    const [isLoading, setIsLoading] = React.useState(false)
     const isCurrent = currentPlan === plan.id
 
     // Simple logic to determine if it's an upgrade or downgrade
@@ -21,13 +23,23 @@ export const PricingCard = ({ plan }: PricingCardProps) => {
     const targetLevel = planLevels[plan.id]
     const isUpgrade = targetLevel > currentLevel
 
-    const handleAction = () => {
+    const handleAction = async () => {
         if (isCurrent) return
+
+        setIsLoading(true)
+
+        // Simulate API call delay
+        await new Promise(resolve => setTimeout(resolve, 1000))
+
         if (isUpgrade) {
             upgradePlan(plan.id)
+            toast.success(`Upgraded to ${plan.name} plan!`)
         } else {
             downgradePlan(plan.id)
+            toast.success(`Switched to ${plan.name} plan`)
         }
+
+        setIsLoading(false)
     }
 
     return (
@@ -64,11 +76,12 @@ export const PricingCard = ({ plan }: PricingCardProps) => {
 
             <CardFooter>
                 <Button
-                    className="w-full"
+                    className="w-full gap-2"
                     variant={isCurrent ? "outline" : "default"}
                     onClick={handleAction}
-                    disabled={isCurrent}
+                    disabled={isCurrent || isLoading}
                 >
+                    {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
                     {isCurrent ? "Active" : isUpgrade ? "Upgrade" : "Downgrade"}
                 </Button>
             </CardFooter>

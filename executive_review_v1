@@ -1,0 +1,106 @@
+Here is my review of the current state of SEOJack CRM, along with specific recommendations to implement before you add the complexity of Firebase and Stripe.
+
+1. Executive Summary
+Strengths: Excellent modularity (Feature-based folders), strong UI consistency (Shadcn + Tailwind), and a clear user journey (Onboarding Wizard is a highlight). Usage of zustand with persistence is the perfect choice for this stage.
+
+Weakness: Mobile navigation is currently incomplete, and there is a disconnect between the "Chat Widget" and the "Messages Page."
+
+Verdict: The frontend shell is 85% ready for backend integration.
+
+2. Critical Architecture Review
+A. The "Service Layer" Pattern (Crucial before Firebase)
+Right now, your logic is inside components or Zustand stores. Before adding Firebase, create a defined interface for your data.
+
+Why: If you hardcode firestore.collection('users') inside your components, refactoring later is a nightmare.
+
+Action: Create a services/ folder.
+
+services/auth.ts (Login, Logout, Reset PW)
+
+services/storage.ts (Upload, Delete, List)
+
+services/database.ts (Generic CRUD)
+
+Benefit: You can keep using Mock data in the service layer while you build, then switch to Firebase just by changing the file content, not the UI components.
+
+B. Unified Messaging State
+Issue: You have a ChatWidget.tsx (floating) and a messages/page.tsx (full screen). Currently, they likely don't share state.
+
+Fix: Create a chat-store.ts. Both the Widget and the Page should subscribe to this same store. If a user types in the widget and then opens the full page, the draft should be there.
+
+3. UX/UI Improvements (The "Concierge" Feel)
+1. Mobile Navigation (Critical Gap)
+I analyzed Sidebar.tsx and Header.tsx.
+
+The Code: Sidebar has hidden md:flex.
+
+The Problem: On mobile screens (<768px), the Sidebar disappears, but Header.tsx has no "Hamburger Menu" button to trigger it. A mobile user is currently trapped on the dashboard.
+
+Fix: Add a Sheet (from Shadcn) to Header.tsx that contains the Sidebar content, triggered by a Menu icon only visible on mobile.
+
+2. "Empty States" are Opportunities
+In FileGrid.tsx, you have a basic "No files found" message.
+
+Improvement: In a "Concierge" app, empty states should prompt action.
+
+Code Change:
+
+TypeScript
+
+// Instead of just text:
+<div className="text-center">
+  <FolderOpen className="mx-auto h-12 w-12 text-gray-400" />
+  <h3 className="mt-2 text-sm font-semibold text-gray-900">No files yet</h3>
+  <p className="mt-1 text-sm text-gray-500">Upload your logo to get started.</p>
+  <div className="mt-6">
+    <Button onClick={triggerUpload}>Upload Now</Button> {/* Call to Action */}
+  </div>
+</div>
+3. The Onboarding "Save" Friction
+Observation: The Wizard.tsx relies on local storage (via Zustand persist).
+
+Risk: If a user clears cache or switches devices mid-onboarding, they lose progress.
+
+Suggestion: When you integrate Firebase, save the onboarding step to the user document on every step change, not just at the end.
+
+4. Code Specific Refinements
+File: src/components/features/billing/PricingCard.tsx
+
+Current: Uses simple logic to determine upgrade/downgrade.
+
+Suggestion: Add a loading state to the buttons. Stripe redirects take 1-3 seconds. If the user clicks "Upgrade" twice, you might create duplicate subscriptions.
+
+File: src/app/layout.tsx
+
+Current: <body className={...}>
+
+Suggestion: You will need a Toaster component here (from sonner or react-hot-toast). You need a global way to show "Profile Updated" or "Upload Failed" notifications without creating local state in every component.
+
+File: src/lib/store/media-store.ts
+
+Current: uploadFile has a setTimeout to simulate delay.
+
+Refinement: When you move to S3/Firebase Storage, file uploads fail often (file too big, bad network). Add an error field to your MediaFile type so you can show a red "Retry" button on the specific file card that failed.
+
+5. Implementation Plan (Before Backend)
+I have prepared a "Next Steps" checklist for you to execute before installing the Firebase SDK.
+
+Step 1: Fix Mobile Navigation
+
+Install Shadcn Sheet: npx shadcn@latest add sheet
+
+Update Header.tsx to include the mobile trigger.
+
+Step 2: Add Global Toast Notifications
+
+Install Sonner: npx shadcn@latest add sonner
+
+Add <Toaster /> to layout.tsx.
+
+Replace alert() calls in FileUploader.tsx and Wizard.tsx with toast.success().
+
+Step 3: Define Zod Schemas
+
+You used Zod in NewTicketDialog.tsx (Excellent).
+
+Now, create a lib/schemas.ts file. Define schemas for Onboarding Data and UserProfile. This ensures that when you do connect Firebase, you aren't saving junk data to the DB.

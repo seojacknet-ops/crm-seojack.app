@@ -1,10 +1,13 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, ChevronRight, User } from 'lucide-react';
+import { Bell, ChevronRight, User, Menu, Settings, LogOut } from 'lucide-react';
 
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { navItems } from "@/components/layout/Sidebar";
 
 export const Header = () => {
     const pathname = usePathname();
@@ -17,17 +20,73 @@ export const Header = () => {
 
     return (
         <header className="h-16 backdrop-blur-md bg-background/80 border-b border-border flex items-center justify-between px-6 sticky top-0 z-30">
-            {/* Breadcrumbs */}
-            <div className="flex items-center text-sm text-muted-foreground">
-                <span className="font-medium text-foreground">Dashboard</span>
-                {breadcrumbs.map((crumb, index) => (
-                    <React.Fragment key={crumb}>
-                        <ChevronRight className="w-4 h-4 mx-2 text-muted-foreground" />
-                        <span className={`font-medium ${index === breadcrumbs.length - 1 ? 'text-brand-purple' : 'text-muted-foreground'}`}>
-                            {crumb}
-                        </span>
-                    </React.Fragment>
-                ))}
+            <div className="flex items-center gap-4">
+                {/* Mobile Menu */}
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <button className="md:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground">
+                            <Menu className="w-6 h-6" />
+                        </button>
+                    </SheetTrigger>
+                    <SheetContent side="left" className="w-64 p-0">
+                        <div className="flex flex-col h-full bg-background">
+                            <div className="p-6 border-b border-border">
+                                <h1 className="text-2xl font-bold tracking-tight">
+                                    <span className="text-foreground">SEO</span>
+                                    <span className="bg-gradient-to-r from-brand-purple to-accent-pink bg-clip-text text-transparent">Jack</span>
+                                </h1>
+                            </div>
+                            <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+                                {navItems.map((item) => {
+                                    const isActive = pathname === item.href;
+                                    return (
+                                        <Link
+                                            key={item.href}
+                                            href={item.href}
+                                            className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${isActive
+                                                ? 'bg-brand-purple text-white shadow-brand'
+                                                : 'text-muted-foreground hover:bg-surface-hover hover:text-foreground hover:border-brand-purple/20'
+                                                }`}
+                                        >
+                                            <item.icon
+                                                className={`w-5 h-5 mr-3 transition-colors ${isActive ? 'text-white' : 'text-muted-foreground group-hover:text-brand-purple'
+                                                    }`}
+                                            />
+                                            {item.label}
+                                        </Link>
+                                    );
+                                })}
+                            </nav>
+                            <div className="p-4 border-t border-border space-y-1">
+                                <Link
+                                    href="/settings"
+                                    className="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:bg-surface-hover hover:text-foreground transition-colors"
+                                >
+                                    <Settings className="w-5 h-5 mr-3 text-muted-foreground" />
+                                    Settings
+                                </Link>
+                                <button className="w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-colors">
+                                    <LogOut className="w-5 h-5 mr-3" />
+                                    Log Out
+                                </button>
+                            </div>
+                        </div>
+                    </SheetContent>
+                </Sheet>
+
+                {/* Breadcrumbs */}
+                <div className="flex items-center text-sm text-muted-foreground">
+                    <span className="font-medium text-foreground hidden sm:inline">Dashboard</span>
+                    <span className="font-medium text-foreground sm:hidden">Home</span>
+                    {breadcrumbs.map((crumb, index) => (
+                        <React.Fragment key={crumb}>
+                            <ChevronRight className="w-4 h-4 mx-2 text-muted-foreground" />
+                            <span className={`font-medium ${index === breadcrumbs.length - 1 ? 'text-brand-purple' : 'text-muted-foreground'}`}>
+                                {crumb}
+                            </span>
+                        </React.Fragment>
+                    ))}
+                </div>
             </div>
 
             {/* Right Actions */}

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Globe, MessageSquare, HardDrive, CreditCard, Settings, LogOut } from 'lucide-react';
 
-const navItems = [
+export const navItems = [
     { label: 'Home', href: '/', icon: Home },
     { label: 'My Website', href: '/website', icon: Globe },
     { label: 'Messages', href: '/messages', icon: MessageSquare },

@@ -3,7 +3,8 @@
 import React from "react"
 import { useMediaStore } from "@/lib/store/media-store"
 import { FileCard } from "./FileCard"
-import { FolderOpen } from "lucide-react"
+import { FolderOpen, Upload } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export const FileGrid = () => {
     const { files, currentFolderId } = useMediaStore()
@@ -15,11 +16,24 @@ export const FileGrid = () => {
 
     if (filteredFiles.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-                <div className="p-4 bg-secondary rounded-full mb-4">
-                    <FolderOpen className="w-8 h-8 opacity-50" />
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+                <div className="p-6 bg-secondary/50 rounded-full mb-6">
+                    <FolderOpen className="w-12 h-12 text-muted-foreground" />
                 </div>
-                <p>No files found in this folder.</p>
+                <h3 className="text-lg font-semibold text-foreground mb-2">No files yet</h3>
+                <p className="text-sm text-muted-foreground mb-6 max-w-sm">
+                    Upload your logo, images, or documents to get started. Drag and drop files into the upload area above.
+                </p>
+                <Button
+                    onClick={() => {
+                        // Scroll to uploader
+                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }}
+                    className="gap-2"
+                >
+                    <Upload className="w-4 h-4" />
+                    Upload Files
+                </Button>
             </div>
         )
     }

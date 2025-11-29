@@ -2,11 +2,11 @@ import React from 'react';
 import { CheckCircle } from 'lucide-react';
 
 interface ProjectTimelineProps {
-    currentStep: number;
+    currentStep?: number;
     totalSteps?: number;
 }
 
-export const ProjectTimeline = ({ currentStep, totalSteps = 5 }: ProjectTimelineProps) => {
+export const ProjectTimeline = ({ currentStep = 1, totalSteps = 5 }: ProjectTimelineProps) => {
     const steps = [
         { label: 'Onboarding', status: currentStep > 1 ? 'completed' : currentStep === 1 ? 'current' : 'pending', desc: 'Complete' },
         { label: 'Design', status: currentStep > 2 ? 'completed' : currentStep === 2 ? 'current' : 'pending', desc: 'In Progress' },

@@ -9,7 +9,7 @@ async function verifyConnection() {
         console.log(`✅ Admin App initialized: ${app.name}`);
 
         // Check Project ID from config
-        const projectId = app.options.credential?.projectId || process.env.FIREBASE_ADMIN_PROJECT_ID;
+        const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID;
         console.log(`ℹ️  Configured Project ID: ${projectId}`);
 
         if (projectId === 'seojack-crm') {

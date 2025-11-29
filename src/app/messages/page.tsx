@@ -243,7 +243,10 @@ export default function MessagesPage() {
                                     )}
 
                                     <div className={`text-xs ${isMe ? 'text-right text-gray-400' : 'text-gray-400'}`}>
-                                        {msg.createdAt ? formatDistanceToNow(msg.createdAt.toDate(), { addSuffix: true }) : 'Sending...'}
+                                        {msg.createdAt ? formatDistanceToNow(
+                                            'toDate' in msg.createdAt ? (msg.createdAt as any).toDate() : msg.createdAt,
+                                            { addSuffix: true }
+                                        ) : 'Sending...'}
                                     </div>
                                 </div>
                             </div>

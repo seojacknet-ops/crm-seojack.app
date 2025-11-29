@@ -4,11 +4,20 @@ import { usePathname } from "next/navigation"
 import { Sidebar } from "@/components/layout/Sidebar"
 import { Header } from "@/components/layout/Header"
 
+// Routes that should render without the app shell (no sidebar/header)
+const STANDALONE_ROUTES = ['/login', '/onboarding']
+
 export function AppShell({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
     const isAdmin = pathname?.startsWith("/admin")
+    
+    // Check if current route should be standalone (no shell)
+    const isStandaloneRoute = STANDALONE_ROUTES.some(route => 
+        pathname === route || pathname?.startsWith(`${route}/`)
+    )
 
-    if (isAdmin) {
+    // Admin pages and standalone routes render without shell
+    if (isAdmin || isStandaloneRoute) {
         return <>{children}</>
     }
 

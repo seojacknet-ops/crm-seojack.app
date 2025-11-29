@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { authService } from '@/services/auth';
+import { isDevModeEnabled, getDevUserType } from '@/lib/dev/dev-mode';
 
 export const AdminGuard = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
@@ -11,6 +12,23 @@ export const AdminGuard = ({ children }: { children: React.ReactNode }) => {
 
     React.useEffect(() => {
         const checkAuth = async () => {
+            // Check dev mode first
+            if (isDevModeEnabled()) {
+                const devUserType = getDevUserType();
+                if (devUserType === 'admin') {
+                    console.log('AdminGuard: Dev mode admin access granted');
+                    setIsAuthorized(true);
+                    setIsLoading(false);
+                    return;
+                } else {
+                    console.warn('AdminGuard: Dev mode user is not admin, redirecting');
+                    router.push('/');
+                    setIsLoading(false);
+                    return;
+                }
+            }
+
+            // Normal auth check
             try {
                 const user = await authService.getCurrentUser();
                 console.log('AdminGuard Check:', user);

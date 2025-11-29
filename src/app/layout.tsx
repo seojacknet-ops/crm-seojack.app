@@ -18,6 +18,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AppShell } from "@/components/layout/AppShell";
 
 import { ImpersonationBanner } from "@/components/features/admin/ImpersonationBanner";
+import { DevModeBanner } from "@/components/dev/DevModeBanner";
 
 export default function RootLayout({
   children,
@@ -33,6 +34,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <DevModeBanner />
           <ImpersonationBanner />
           <AppShell>
             {children}

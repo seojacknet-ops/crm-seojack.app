@@ -9,12 +9,12 @@ import RecentActivity from '@/components/features/dashboard/RecentActivity';
 import QuickActions from '@/components/features/dashboard/QuickActions';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import GetStartedTab from '@/components/features/dashboard/GetStartedTab';
-import { AuthView } from '@/components/features/auth/AuthView';
 import { DevToolbar, DevUserState } from '@/components/features/dev/DevToolbar';
 import { authService } from '@/services/auth';
 import { ProjectTimeline } from '@/components/features/dashboard/ProjectTimeline';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
-export default function DashboardHome() {
+function DashboardContent() {
   const [user, setUser] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(true);
   const [projectPhase, setProjectPhase] = React.useState("Onboarding");
@@ -104,14 +104,9 @@ export default function DashboardHome() {
     return <div className="flex items-center justify-center h-screen text-brand-purple animate-pulse">Loading SEOJack...</div>;
   }
 
-  // Render Auth View if no user
+  // User is guaranteed by ProtectedRoute, but handle edge case
   if (!user) {
-    return (
-      <>
-        <AuthView />
-        <DevToolbar onSimulate={setDevState} currentState={devState} />
-      </>
-    )
+    return <div className="flex items-center justify-center h-screen text-brand-purple animate-pulse">Loading...</div>;
   }
 
   const userName = user?.name || "Guest";
@@ -301,5 +296,14 @@ export default function DashboardHome() {
 
       <DevToolbar onSimulate={setDevState} currentState={devState} />
     </div>
+  );
+}
+
+// Wrap dashboard with ProtectedRoute - requires auth and completed onboarding
+export default function DashboardHome() {
+  return (
+    <ProtectedRoute requireOnboardingComplete>
+      <DashboardContent />
+    </ProtectedRoute>
   );
 }

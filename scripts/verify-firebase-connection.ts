@@ -1,4 +1,4 @@
-import { adminDb, adminApp } from '../src/lib/firebase/admin';
+import { adminDb } from '../src/lib/firebase/admin';
 import { getApp } from 'firebase-admin/app';
 
 async function verifyConnection() {

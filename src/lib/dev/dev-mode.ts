@@ -14,6 +14,12 @@ export type DevUserType = 'none' | 'new_user' | 'returning_user' | 'admin';
 
 const DEV_MODE_KEY = 'seojack_dev_mode';
 const DEV_USER_TYPE_KEY = 'seojack_dev_user_type';
+export const DEV_MODE_CHANGE_EVENT = 'seojack-dev-mode-change';
+
+function notifyDevModeChange(): void {
+    if (typeof window === 'undefined') return;
+    window.dispatchEvent(new Event(DEV_MODE_CHANGE_EVENT));
+}
 
 // Check if we're in development
 export function isDevelopment(): boolean {
@@ -30,6 +36,7 @@ export function isDevModeEnabled(): boolean {
 export function setDevMode(enabled: boolean): void {
     if (typeof window === 'undefined') return;
     localStorage.setItem(DEV_MODE_KEY, enabled ? 'true' : 'false');
+    notifyDevModeChange();
 }
 
 // Get current dev user type
@@ -44,6 +51,8 @@ export function setDevUserType(type: DevUserType): void {
     localStorage.setItem(DEV_USER_TYPE_KEY, type);
     if (type !== 'none') {
         setDevMode(true);
+    } else {
+        notifyDevModeChange();
     }
 }
 
@@ -52,6 +61,7 @@ export function clearDevMode(): void {
     if (typeof window === 'undefined') return;
     localStorage.removeItem(DEV_MODE_KEY);
     localStorage.removeItem(DEV_USER_TYPE_KEY);
+    notifyDevModeChange();
 }
 
 // Mock user data for each type
@@ -125,4 +135,3 @@ export function getDevRedirectPath(type: DevUserType): string {
             return '/login';
     }
 }
-

@@ -9,104 +9,143 @@ import RecentActivity from '@/components/features/dashboard/RecentActivity';
 import QuickActions from '@/components/features/dashboard/QuickActions';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import GetStartedTab from '@/components/features/dashboard/GetStartedTab';
-import { DevToolbar, DevUserState } from '@/components/features/dev/DevToolbar';
-import { authService } from '@/services/auth';
+import { authService, AuthUser } from '@/services/auth';
 import { ProjectTimeline } from '@/components/features/dashboard/ProjectTimeline';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { DEV_MODE_CHANGE_EVENT, getDevUserType, getMockUserData, isDevModeEnabled } from '@/lib/dev/dev-mode';
 
 function DashboardContent() {
-  const [user, setUser] = React.useState<any>(null);
+  const [user, setUser] = React.useState<AuthUser | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [projectPhase, setProjectPhase] = React.useState("Onboarding");
   const [currentStep, setCurrentStep] = React.useState(1);
-  const [devState, setDevState] = React.useState<DevUserState>('real');
 
-  // Fetch real user
+  const withTimeout = React.useCallback(<T,>(promise: Promise<T>, ms: number, label: string): Promise<T> => {
+    return new Promise<T>((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
+      promise.then(
+        (value) => {
+          clearTimeout(timer);
+          resolve(value);
+        },
+        (error) => {
+          clearTimeout(timer);
+          reject(error);
+        }
+      );
+    });
+  }, []);
+
+  const getDevUser = React.useCallback((): AuthUser | null => {
+    if (!isDevModeEnabled()) return null;
+    const mock = getMockUserData(getDevUserType());
+    if (!mock) return null;
+    return {
+      id: mock.id,
+      email: mock.email,
+      name: mock.name,
+      plan: mock.plan,
+      avatarUrl: mock.avatarUrl,
+      role: mock.role,
+    };
+  }, []);
+
+  const applyPhaseFromOnboarding = React.useCallback((onboardingComplete: boolean | undefined) => {
+    if (onboardingComplete) {
+      setProjectPhase("Design Draft");
+      setCurrentStep(2);
+    } else {
+      setProjectPhase("Onboarding");
+      setCurrentStep(1);
+    }
+  }, []);
+
+  // Fetch user (dev mode first, then real auth)
   const fetchUser = React.useCallback(async () => {
+    setLoading(true);
     try {
-      const currentUser = await authService.getCurrentUser();
+      const devUser = getDevUser();
+      if (devUser) {
+        setUser(devUser);
+        const devDoc = getMockUserData(getDevUserType());
+        applyPhaseFromOnboarding(devDoc?.onboardingComplete);
+        return;
+      }
+
+      const currentUser = await withTimeout(authService.getCurrentUser(), 8000, 'Auth');
       if (currentUser) {
         setUser(currentUser);
         // Determine phase based on onboarding status
-        const profile = await import('@/services/database').then(m => m.databaseService.read<any>('users', currentUser.id));
-        if (profile?.onboardingCompleted) {
-          setProjectPhase("Design Draft");
-          setCurrentStep(2);
-        } else {
-          setProjectPhase("Onboarding");
-          setCurrentStep(1);
-        }
+        const profile = await withTimeout(
+          import('@/services/database').then(m => m.databaseService.read<any>('users', currentUser.id)),
+          8000,
+          'Profile'
+        );
+        // Note: some older data uses onboardingCompleted; current schema uses onboardingComplete
+        const onboardingComplete = Boolean(profile?.onboardingComplete ?? profile?.onboardingCompleted);
+        applyPhaseFromOnboarding(onboardingComplete);
       } else {
         setUser(null);
       }
     } catch (error) {
       console.error("Failed to fetch user", error);
+      setUser(null);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [applyPhaseFromOnboarding, getDevUser, withTimeout]);
 
-  // Handle Dev State Changes
+  // Initial load + keep in sync with auth + dev-mode switches
   React.useEffect(() => {
-    const applyDevState = async () => {
-      setLoading(true);
-      if (devState === 'real') {
-        await fetchUser();
-      } else {
-        // Simulate User
-        const mockUser = {
-          id: 'dev-user',
-          email: 'dev@example.com',
-          name: 'Dev User',
-          plan: 'starter'
-        };
+    fetchUser();
 
-        if (devState === 'new_user') {
-          setUser({ ...mockUser, name: 'New User' });
-          setProjectPhase("Onboarding");
-          setCurrentStep(1);
-        } else if (devState === 'standard_plan') {
-          setUser({ ...mockUser, name: 'Standard User', plan: 'growth' });
-          setProjectPhase("Design Draft");
-          setCurrentStep(2);
-        } else if (devState === 'pro_plan') {
-          setUser({ ...mockUser, name: 'Pro User', plan: 'pro' });
-          setProjectPhase("Development");
-          setCurrentStep(3);
-        } else if (devState === 'admin') {
-          setUser({ ...mockUser, name: 'Admin User', role: 'admin' });
-          setProjectPhase("Live");
-          setCurrentStep(5);
-        }
-        setLoading(false);
-      }
+    const handleDevChange = () => {
+      fetchUser();
     };
-    applyDevState();
-  }, [devState, fetchUser]);
+    window.addEventListener(DEV_MODE_CHANGE_EVENT, handleDevChange);
 
-  // Listen for auth changes (only in real mode)
-  React.useEffect(() => {
-    if (devState !== 'real') return;
+    let unsubscribeAuth: undefined | (() => void);
+    try {
+      unsubscribeAuth = authService.onAuthStateChanged(() => {
+        // If dev mode is enabled, we don't want firebase auth events to override dev mock user.
+        if (!isDevModeEnabled()) fetchUser();
+      });
+    } catch (err) {
+      console.warn('Auth listener failed to attach:', err);
+    }
 
-    const unsubscribe = authService.onAuthStateChanged(async (authUser) => {
-      if (authUser) {
-        await fetchUser();
-      } else {
-        setUser(null);
-        setLoading(false);
-      }
-    });
-    return () => unsubscribe();
-  }, [devState, fetchUser]);
+    return () => {
+      window.removeEventListener(DEV_MODE_CHANGE_EVENT, handleDevChange);
+      unsubscribeAuth?.();
+    };
+  }, [fetchUser]);
 
 
   if (loading) {
     return <div className="flex items-center justify-center h-screen text-brand-purple animate-pulse">Loading SEOJack...</div>;
   }
 
-  // User is guaranteed by ProtectedRoute, but handle edge case
+  // User is guaranteed by ProtectedRoute in normal flow, but handle edge cases + timeouts.
   if (!user) {
-    return <div className="flex items-center justify-center h-screen text-brand-purple animate-pulse">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center max-w-md">
+          <p className="text-lg font-semibold text-gray-900">You’re not signed in.</p>
+          <p className="mt-2 text-sm text-gray-600">
+            If you’re trying to use Dev Mode, pick a user type from the top banner.
+            Otherwise, sign in to continue.
+          </p>
+          <div className="mt-4">
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center rounded-xl bg-brand-purple px-4 py-2 text-sm font-medium text-white hover:bg-brand-purple-dark"
+            >
+              Go to Login
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const userName = user?.name || "Guest";
@@ -293,8 +332,6 @@ function DashboardContent() {
           </div>
         </TabsContent>
       </Tabs>
-
-      <DevToolbar onSimulate={setDevState} currentState={devState} />
     </div>
   );
 }

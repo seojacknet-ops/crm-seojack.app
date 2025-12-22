@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { UserDocument, ProjectDocument, TicketDocument } from '@/lib/schemas/firebase'
 import { databaseService } from '@/services/database'
+import { getStripeStats } from '@/app/admin/actions'
 
 interface AdminState {
     projects: ProjectDocument[]
@@ -31,21 +32,12 @@ export const useAdminStore = create<AdminState>()((set, get) => ({
         set({ isLoading: true })
         try {
             // Parallel fetch
-            const [projects, users, tickets] = await Promise.all([
+            const [projects, users, tickets, stripeStats] = await Promise.all([
                 databaseService.query<any>('projects'),
                 databaseService.query<any>('users'),
-                databaseService.query<any>('tickets')
+                databaseService.query<any>('tickets'),
+                getStripeStats()
             ])
-
-            // Calculate stats
-            // Revenue: Sum of 'pro' plan users * price (mock calculation)
-            // Starter: 299, Growth: 599, Pro: 999
-            let revenue = 0
-            users.forEach(u => {
-                if (u.plan === 'starter') revenue += 299
-                if (u.plan === 'growth') revenue += 599
-                if (u.plan === 'pro') revenue += 999
-            })
 
             const activeProjects = projects.length
             const openTickets = tickets.filter(t => t.status === 'open' || t.status === 'in_progress').length
@@ -55,7 +47,7 @@ export const useAdminStore = create<AdminState>()((set, get) => ({
                 users,
                 tickets,
                 stats: {
-                    totalRevenue: revenue,
+                    totalRevenue: stripeStats.totalRevenue,
                     activeProjects,
                     openTickets
                 },

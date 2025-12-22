@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      // Check for admin role in Custom Claims OR in the user document
+      // Also allow specific hardcoded admin for bootstrapping
+      return isAuthenticated() && (
+        request.auth.token.email == 'solarisnoego@gmail.com' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId) || isAdmin();
+    }
+    
+    match /notifications/{notificationId} {
+      allow read: if isOwner(resource.data.userId) || isAdmin();
+      allow create: if isOwner(request.resource.data.userId) || isAdmin();
+      allow update: if isOwner(resource.data.userId) || isAdmin();
+    }
+    
+    match /tickets/{ticketId} {
+      allow read: if isOwner(resource.data.userId) || isAdmin();
+      allow create: if isOwner(request.resource.data.userId) || isAdmin();
+      allow update: if isOwner(resource.data.userId) || isAdmin();
+      
+      match /comments/{commentId} {
+        allow read, write: if isAuthenticated();
+      }
+    }
+    
+    match /conversations/{conversationId} {
+      allow read: if isAuthenticated() && (resource.data.participants == null || request.auth.uid in resource.data.participants || isAdmin());
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && (resource.data.participants == null || request.auth.uid in resource.data.participants || isAdmin());
+      
+      match /messages/{messageId} {
+        allow read, write: if isAuthenticated();
+      }
+    }
+
+    // Allow admins to read everything else (like stats for dashboard)
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

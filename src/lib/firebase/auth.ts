@@ -60,6 +60,7 @@ export const authService = {
                 email: user.email,
                 name: user.displayName || 'User',
                 avatarUrl: user.photoURL,
+                role: user.email === 'solarisnoego@gmail.com' ? 'admin' : 'client',
                 plan: 'starter',
                 subscriptionStatus: 'trialing',
                 onboardingComplete: false,
@@ -71,6 +72,7 @@ export const authService = {
             await setDoc(doc(db, 'users', user.uid), {
                 lastLoginAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
+                ...(user.email === 'solarisnoego@gmail.com' ? { role: 'admin' } : {})
             }, { merge: true });
         }
 

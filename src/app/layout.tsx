@@ -13,9 +13,9 @@ export const metadata: Metadata = {
   title: "SEOJack Client Hub",
   description: "Your digital concierge for web design.",
   icons: {
-    icon: '/seojack-icon-1025-6b7885d0.webp',
-    shortcut: '/seojack-icon-1025-6b7885d0.webp',
-    apple: '/seojack-icon-1025-6b7885d0.webp',
+    icon: '/icon.png',
+    shortcut: '/favicon.ico',
+    apple: '/apple-icon.png',
   },
 };
 

@@ -134,9 +134,6 @@ export default function UserManagementPage() {
                                                 <DropdownMenuItem onClick={() => authService.impersonate(user.id)}>
                                                     <Shield className="mr-2 h-4 w-4" /> Impersonate
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem>
-                                                    <Mail className="mr-2 h-4 w-4" /> Email Client
-                                                </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </TableCell>

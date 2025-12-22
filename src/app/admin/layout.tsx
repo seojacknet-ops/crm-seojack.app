@@ -9,12 +9,6 @@ import {
     Briefcase,
     Inbox,
     Ticket,
-    CreditCard,
-    FileText,
-    Globe,
-    Users2,
-    Settings,
-    BarChart3,
     LogOut
 } from "lucide-react"
 import { useAuth } from '@/hooks/useAuth';
@@ -25,12 +19,6 @@ const navigation = [
     { name: 'Projects', href: '/admin/projects', icon: Briefcase },
     { name: 'Inbox', href: '/admin/inbox', icon: Inbox },
     { name: 'Tickets', href: '/admin/tickets', icon: Ticket },
-    { name: 'Billing', href: '/admin/billing', icon: CreditCard },
-    { name: 'Content', href: '/admin/content', icon: FileText },
-    { name: 'Domains', href: '/admin/domains', icon: Globe },
-    { name: 'Team', href: '/admin/team', icon: Users2 },
-    { name: 'Settings', href: '/admin/settings', icon: Settings },
-    { name: 'Reports', href: '/admin/reports', icon: BarChart3 },
 ]
 
 export default function AdminLayout({

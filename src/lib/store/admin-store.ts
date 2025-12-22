@@ -11,7 +11,6 @@ interface AdminState {
         totalRevenue: number
         activeProjects: number
         openTickets: number
-        unreadMessages: number
     }
 
     fetchDashboardData: () => Promise<void>
@@ -25,8 +24,7 @@ export const useAdminStore = create<AdminState>()((set, get) => ({
     stats: {
         totalRevenue: 0,
         activeProjects: 0,
-        openTickets: 0,
-        unreadMessages: 0
+        openTickets: 0
     },
 
     fetchDashboardData: async () => {
@@ -52,9 +50,6 @@ export const useAdminStore = create<AdminState>()((set, get) => ({
             const activeProjects = projects.length
             const openTickets = tickets.filter(t => t.status === 'open' || t.status === 'in_progress').length
 
-            // Mock unread messages for now as we don't have a global message query yet
-            const unreadMessages = 12
-
             set({
                 projects,
                 users,
@@ -62,8 +57,7 @@ export const useAdminStore = create<AdminState>()((set, get) => ({
                 stats: {
                     totalRevenue: revenue,
                     activeProjects,
-                    openTickets,
-                    unreadMessages
+                    openTickets
                 },
                 isLoading: false
             })

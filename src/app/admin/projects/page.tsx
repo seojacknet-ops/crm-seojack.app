@@ -100,9 +100,7 @@ export default function ProjectsPage() {
                                             </Link>
                                         ))
                                     )}
-                                    <Button variant="ghost" className="w-full justify-start text-muted-foreground hover:text-indigo-600 text-sm h-9 border border-dashed border-gray-200 dark:border-gray-800 hover:border-indigo-200 hover:bg-indigo-50/50 rounded-lg">
-                                        <Plus className="mr-2 h-3 w-3" /> Add Task
-                                    </Button>
+
                                 </div>
                             </div>
                         );

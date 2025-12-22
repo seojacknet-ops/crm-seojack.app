@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast } from 'sonner';
-import { Loader2, Mail, Lock, User, ArrowRight, Wrench, UserPlus, Users, Shield } from 'lucide-react';
+import { Loader2, Mail, Lock, User, ArrowRight, Wrench, UserPlus, Users, Shield, Rocket, FileText, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { doc, getDoc } from 'firebase/firestore';
 
@@ -205,44 +205,49 @@ function LoginPageContent() {
                             alt="SEOJack"
                             className="h-12 w-auto brightness-0 invert"
                         />
-                        <p className="text-purple-200 mt-3 font-medium">Client Portal</p>
+                        <h1 className="text-white text-3xl font-bold mt-6">Your Path to a <br />Premium Website</h1>
+                        <p className="text-purple-200 mt-2 text-lg">It's easier than you think.</p>
                     </div>
 
                     {/* Value Props */}
-                    <div className="space-y-8">
-                        <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                                <svg className="w-5 h-5 text-pink-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
+                    {/* Steps / How it works */}
+                    <div className="space-y-8 relative">
+                        {/* Connecting Line */}
+                        <div className="absolute left-[19px] top-4 bottom-4 w-0.5 bg-gradient-to-b from-purple-400/50 to-transparent z-0" />
+
+                        <div className="flex items-start gap-4 relative z-10">
+                            <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg backdrop-blur-sm">
+                                <FileText className="w-5 h-5 text-pink-300" />
                             </div>
                             <div>
-                                <h3 className="text-white font-semibold">Lightning Fast Websites</h3>
-                                <p className="text-purple-200 text-sm mt-1">Get your professional website live in days, not months</p>
+                                <h3 className="text-white font-semibold text-lg">1. Brief Us</h3>
+                                <p className="text-purple-200 text-sm mt-1 leading-relaxed">
+                                    Share your vision. Fill out a simple profile about your business and goals.
+                                </p>
                             </div>
                         </div>
 
-                        <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                                <svg className="w-5 h-5 text-pink-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                </svg>
+                        <div className="flex items-start gap-4 relative z-10">
+                            <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg backdrop-blur-sm">
+                                <Wrench className="w-5 h-5 text-purple-300" />
                             </div>
                             <div>
-                                <h3 className="text-white font-semibold">Built for Local Business</h3>
-                                <p className="text-purple-200 text-sm mt-1">SEO-optimized to attract customers in your area</p>
+                                <h3 className="text-white font-semibold text-lg">2. We Build</h3>
+                                <p className="text-purple-200 text-sm mt-1 leading-relaxed">
+                                    Sit back while our experts craft a stunning, SEO-optimized website for you.
+                                </p>
                             </div>
                         </div>
 
-                        <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                                <svg className="w-5 h-5 text-pink-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-                                </svg>
+                        <div className="flex items-start gap-4 relative z-10">
+                            <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg backdrop-blur-sm">
+                                <Rocket className="w-5 h-5 text-blue-300" />
                             </div>
                             <div>
-                                <h3 className="text-white font-semibold">Dedicated Support</h3>
-                                <p className="text-purple-200 text-sm mt-1">Real humans helping you every step of the way</p>
+                                <h3 className="text-white font-semibold text-lg">3. You Grow</h3>
+                                <p className="text-purple-200 text-sm mt-1 leading-relaxed">
+                                    Launch your new site, rank higher on Google, and start attracting real leads.
+                                </p>
                             </div>
                         </div>
                     </div>

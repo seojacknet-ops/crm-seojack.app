@@ -51,11 +51,13 @@ export const authService = {
         const { user } = await signInWithPopup(auth, googleProvider);
 
         // Check if user document exists
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDocSnapshot = await getDoc(userDocRef);
+        let userData: any;
 
-        if (!userDoc.exists()) {
+        if (!userDocSnapshot.exists()) {
             // Create new user document
-            await setDoc(doc(db, 'users', user.uid), {
+            userData = {
                 id: user.uid,
                 email: user.email,
                 name: user.displayName || 'User',
@@ -66,17 +68,34 @@ export const authService = {
                 onboardingComplete: false,
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
-            });
+            };
+            await setDoc(userDocRef, userData);
         } else {
             // Update last login
-            await setDoc(doc(db, 'users', user.uid), {
+            const updates: any = {
                 lastLoginAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
-                ...(user.email === 'solarisnoego@gmail.com' ? { role: 'admin' } : {})
-            }, { merge: true });
+            };
+
+            // Force admin role for specific email
+            if (user.email === 'solarisnoego@gmail.com') {
+                updates.role = 'admin';
+            }
+
+            await setDoc(userDocRef, updates, { merge: true });
+
+            // Get the updated data
+            userData = { ...userDocSnapshot.data(), ...updates };
+            // Ensure serverTimestamp is not returned as object in local state immediately if needed, 
+            // but for redirect logic strings/booleans are fine. 
+            // Actually, best to return the merged data.
+            // If we just updated role, we should make sure userData reflects it.
+            if (updates.role) {
+                userData.role = updates.role;
+            }
         }
 
-        return user;
+        return { user, userData };
     },
 
     // Sign out

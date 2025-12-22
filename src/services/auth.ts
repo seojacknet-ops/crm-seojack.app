@@ -12,7 +12,10 @@ export interface AuthUser {
     plan: 'starter' | 'growth' | 'pro'
     avatarUrl?: string
     role?: 'client' | 'admin'
+    onboardingComplete?: boolean
 }
+
+
 
 export interface LoginCredentials {
     email: string
@@ -121,7 +124,8 @@ export class FirebaseAuthService implements AuthService {
             name: profileData.fullName || profileData.name || 'Impersonated User',
             plan: profileData.plan || 'starter',
             avatarUrl: profileData.avatarUrl,
-            role: profileData.role || 'client'
+            role: profileData.role || 'client',
+            onboardingComplete: profileData.onboardingComplete || false,
         };
     }
 
@@ -188,6 +192,23 @@ export class FirebaseAuthService implements AuthService {
 
             await (databaseService as any).set('users', userCredential.user.uid, profileData);
             profile = profileData;
+        } else {
+            // Update existing user
+            const updates: any = {
+                lastLoginAt: new Date().toISOString(), // Use ISO string or serverTimestamp depending on service
+                updatedAt: new Date().toISOString()
+            };
+
+            // Force admin role for specific email
+            if (userCredential.user.email === 'solarisnoego@gmail.com') {
+                updates.role = 'admin';
+                profile.role = 'admin'; // Update local profile object for mapping
+            }
+
+            await (databaseService as any).update('users', userCredential.user.uid, updates);
+
+            // Merge updates into profile for return
+            profile = { ...profile, ...updates };
         }
 
         return this.mapUser(userCredential.user, profile);

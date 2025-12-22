@@ -159,11 +159,13 @@ function LoginPageContent() {
             const user = await authService.loginWithGoogle();
             toast.success('Signed in with Google!');
 
-            // Fetch user document to determine redirect
-            const userDoc = await getDoc(doc(db, 'users', user.id));
-            const userData = userDoc.exists() ? userDoc.data() as UserDocument : null;
+            let destination = getPostLoginRedirect(user as unknown as UserDocument, redirectTo || undefined);
 
-            const destination = getPostLoginRedirect(userData, redirectTo || undefined);
+            // Fail-safe: Force admin redirect for specific email
+            if (user.email === 'solarisnoego@gmail.com') {
+                destination = '/admin';
+            }
+
             router.replace(destination);
         } catch (error: any) {
             console.error('Google auth error:', error);

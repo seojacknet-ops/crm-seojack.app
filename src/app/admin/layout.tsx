@@ -14,8 +14,10 @@ import {
     Globe,
     Users2,
     Settings,
-    BarChart3
+    BarChart3,
+    LogOut
 } from "lucide-react"
+import { useAuth } from '@/hooks/useAuth';
 
 const navigation = [
     { name: 'Command Center', href: '/admin', icon: LayoutDashboard },
@@ -36,6 +38,8 @@ export default function AdminLayout({
 }: {
     children: React.ReactNode
 }) {
+    const { user, signOut } = useAuth();
+
     return (
         <AdminGuard>
             <div className="flex h-screen bg-gray-50/50 dark:bg-gray-950 overflow-hidden">
@@ -63,15 +67,32 @@ export default function AdminLayout({
                         </ul>
                     </nav>
                     <div className="p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 pb-20">
-                        <div className="flex items-center gap-3">
-                            <div className="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow-sm ring-2 ring-white dark:ring-gray-800">
-                                JS
-                            </div>
-                            <div>
-                                <p className="text-sm font-semibold text-gray-900 dark:text-white">Hello, Jack</p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Admin</p>
+                        <div className="flex items-center gap-3 mb-3">
+                            {user?.photoURL ? (
+                                <img
+                                    src={user.photoURL}
+                                    alt={user.displayName || 'Admin'}
+                                    className="h-9 w-9 rounded-full shadow-sm ring-2 ring-white dark:ring-gray-800 object-cover"
+                                />
+                            ) : (
+                                <div className="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow-sm ring-2 ring-white dark:ring-gray-800">
+                                    {(user?.displayName || 'Admin').substring(0, 2).toUpperCase()}
+                                </div>
+                            )}
+                            <div className="overflow-hidden">
+                                <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                                    {user?.displayName || 'Admin User'}
+                                </p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Administrator</p>
                             </div>
                         </div>
+                        <button
+                            onClick={() => signOut()}
+                            className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
+                        >
+                            <LogOut className="h-3 w-3" />
+                            Sign Out
+                        </button>
                     </div>
                 </aside>
 

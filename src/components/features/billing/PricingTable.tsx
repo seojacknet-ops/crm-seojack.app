@@ -4,21 +4,21 @@ import { Check } from 'lucide-react';
 const plans = [
     {
         name: 'Starter',
-        price: '$97',
+        price: '£97',
         period: '/month',
         features: ['5 Pages', 'Basic SEO', 'Standard Support', '1 Revision Round'],
         popular: false,
     },
     {
         name: 'Growth',
-        price: '$197',
+        price: '£197',
         period: '/month',
         features: ['10 Pages', 'Advanced SEO', 'Priority Support', '3 Revision Rounds', 'Blog Setup'],
         popular: true,
     },
     {
         name: 'Pro',
-        price: '$297',
+        price: '£297',
         period: '/month',
         features: ['15+ Pages', 'Technical SEO', '24/7 Concierge', 'Unlimited Revisions', 'E-commerce'],
         popular: false,

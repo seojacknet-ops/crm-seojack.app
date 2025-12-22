@@ -84,7 +84,7 @@ export const Header = () => {
                                     <img
                                         src="/seojack-logo-dark.png"
                                         alt="SEOJack"
-                                        className="h-8 w-auto"
+                                        className="h-8 w-auto object-contain"
                                     />
                                 </h1>
                             </div>

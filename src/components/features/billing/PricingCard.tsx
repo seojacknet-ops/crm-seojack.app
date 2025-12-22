@@ -52,7 +52,7 @@ export const PricingCard = ({ plan }: PricingCardProps) => {
 
             <CardContent className="flex-1 space-y-6">
                 <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold">${plan.price}</span>
+                    <span className="text-4xl font-bold">£{plan.price}</span>
                     <span className="text-muted-foreground">/month</span>
                 </div>
 

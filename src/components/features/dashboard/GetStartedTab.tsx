@@ -14,41 +14,63 @@ export default function GetStartedTab() {
                 <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-60 h-60 bg-white/5 rounded-full blur-2xl"></div>
 
-                <div className="relative z-10 max-w-2xl">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 text-sm font-medium mb-6">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                        </span>
-                        Welcome to SEOJack
+                <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div className="max-w-xl">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/20 text-sm font-medium mb-6">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                            </span>
+                            Welcome to SEOJack
+                        </div>
+
+                        <h1 className="text-3xl sm:text-5xl font-bold mb-6 leading-tight">
+                            Let's build your <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-pink-200">
+                                dream website.
+                            </span>
+                        </h1>
+
+                        <p className="text-lg text-white/80 mb-8 leading-relaxed">
+                            We've streamlined the entire process. Complete our quick onboarding wizard to tell us about your brand, and we'll handle the rest.
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <Link
+                                href="/onboarding"
+                                className="inline-flex items-center justify-center px-8 py-4 bg-white text-brand-purple font-bold rounded-xl hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 group"
+                            >
+                                Start Onboarding
+                                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                            <Link
+                                href="/messages"
+                                className="inline-flex items-center justify-center px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-medium rounded-xl hover:bg-white/20 transition-all"
+                            >
+                                <MessageSquare className="w-5 h-5 mr-2" />
+                                Talk to an Expert
+                            </Link>
+                        </div>
                     </div>
 
-                    <h1 className="text-3xl sm:text-5xl font-bold mb-6 leading-tight">
-                        Let's build your <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-pink-200">
-                            dream website.
-                        </span>
-                    </h1>
+                    {/* Welcome Video Placeholder */}
+                    <div className="relative hidden lg:block">
+                        <div className="relative aspect-video bg-black/20 rounded-2xl border border-white/10 flex items-center justify-center group cursor-pointer hover:bg-black/30 transition-all backdrop-blur-sm shadow-2xl overflow-hidden hover:scale-[1.02] duration-300">
+                            {/* Simple animated background for placeholder */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50"></div>
 
-                    <p className="text-lg text-white/80 mb-8 leading-relaxed max-w-lg">
-                        We've streamlined the entire process. Complete our quick onboarding wizard to tell us about your brand, and we'll handle the rest.
-                    </p>
+                            <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center pl-2 shadow-2xl group-hover:scale-110 transition-transform duration-300 z-10 backdrop-blur-md">
+                                <Play className="w-8 h-8 text-brand-purple fill-brand-purple" />
+                            </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4">
-                        <Link
-                            href="/onboarding"
-                            className="inline-flex items-center justify-center px-8 py-4 bg-white text-brand-purple font-bold rounded-xl hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 group"
-                        >
-                            Start Onboarding
-                            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                        <Link
-                            href="/messages"
-                            className="inline-flex items-center justify-center px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-medium rounded-xl hover:bg-white/20 transition-all"
-                        >
-                            <MessageSquare className="w-5 h-5 mr-2" />
-                            Talk to an Expert
-                        </Link>
+                            <div className="absolute bottom-6 left-0 right-0 text-center z-10">
+                                <p className="text-sm font-semibold text-white/90 tracking-wide uppercase text-shadow-sm">Watch: Welcome to SEOJack</p>
+                                <p className="text-xs text-white/60 mt-1">1 min introduction</p>
+                            </div>
+                        </div>
+
+                        {/* Decorative elements behind video */}
+                        <div className="absolute -top-6 -right-6 w-full h-full border-2 border-white/10 rounded-2xl -z-10 bg-white/5 backdrop-blur-sm"></div>
                     </div>
                 </div>
             </div>

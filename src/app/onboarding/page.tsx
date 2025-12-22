@@ -35,7 +35,7 @@ export default function OnboardingPage() {
                             <img
                                 src="/seojack-logo-dark.png"
                                 alt="SEOJack"
-                                className="h-8 w-auto"
+                                className="h-8 w-auto object-contain"
                             />
                             <div className="h-8 w-[1px] bg-gray-200 mx-1"></div>
                             <p className="text-xs font-medium text-gray-500 uppercase tracking-wide pt-0.5">Project Setup</p>

@@ -71,7 +71,7 @@ export default function GetStartedPage() {
             {/* Simple Header */}
             <header className="bg-white border-b border-gray-200 px-6 py-4">
                 <div className="max-w-4xl mx-auto flex items-center gap-3">
-                    <img src="/seojack-logo-dark.png" alt="SEOJack" className="h-8 w-auto" />
+                    <img src="/seojack-logo-dark.png" alt="SEOJack" className="h-8 w-auto object-contain" />
                 </div>
             </header>
 
@@ -88,8 +88,8 @@ export default function GetStartedPage() {
                             onClick={handleContinue}
                             disabled={!isValid() || isSubmitting}
                             className={`flex items-center px-8 py-3 rounded-lg text-sm font-medium transition-all ${isValid() && !isSubmitting
-                                    ? 'bg-brand-purple text-white hover:bg-brand-purple-dark shadow-lg shadow-brand-purple/30'
-                                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                                ? 'bg-brand-purple text-white hover:bg-brand-purple-dark shadow-lg shadow-brand-purple/30'
+                                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                                 }`}
                         >
                             {isSubmitting ? 'Saving...' : 'Go to Dashboard'}

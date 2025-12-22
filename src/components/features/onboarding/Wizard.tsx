@@ -60,7 +60,7 @@ export const Wizard = () => {
                 const user = await authService.getCurrentUser();
                 if (user) {
                     await databaseService.update('users', user.id, {
-                        onboardingCompleted: true,
+                        onboardingComplete: true,
                         quizData: data,
                         updatedAt: new Date()
                     });
@@ -73,7 +73,7 @@ export const Wizard = () => {
                     });
                     toast.success('🎉 Onboarding Complete! Redirecting to your dashboard...')
                     setTimeout(() => {
-                        router.push('/')
+                        window.location.href = '/'
                     }, 1500)
                 } else {
                     toast.error('Error: No user logged in. Please log in and try again.');

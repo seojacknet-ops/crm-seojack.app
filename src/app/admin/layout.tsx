@@ -75,7 +75,10 @@ export default function AdminLayout({
                             </div>
                         </div>
                         <button
-                            onClick={() => signOut()}
+                            onClick={async () => {
+                                await signOut()
+                                window.location.href = 'https://seojack.website'
+                            }}
                             className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
                         >
                             <LogOut className="h-3 w-3" />

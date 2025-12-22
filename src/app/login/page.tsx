@@ -272,9 +272,9 @@ function LoginPageContent() {
                     {/* Mobile Logo */}
                     <div className="lg:hidden text-center mb-8 flex flex-col items-center">
                         <img
-                            src="/seojack-digital-marketing-logo-1025-506d8cee.webp"
+                            src="/seojack-logo-dark.png"
                             alt="SEOJack"
-                            className="h-12 w-auto mb-8"
+                            className="h-12 w-auto mb-8 object-contain"
                         />
                         <p className="text-gray-500 text-sm">Client Portal</p>
                     </div>

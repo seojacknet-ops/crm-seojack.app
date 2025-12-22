@@ -20,6 +20,7 @@ export interface UserDocument {
     updatedAt: Timestamp;
     lastLoginAt?: Timestamp;
     onboardingComplete: boolean;
+    leadCaptureComplete?: boolean;
 }
 
 export interface ProjectDocument {

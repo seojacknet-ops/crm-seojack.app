@@ -9,12 +9,12 @@ import { authService } from '@/services/auth';
 import { db } from '@/lib/firebase/client';
 import { UserDocument } from '@/lib/schemas/firebase';
 import { getPostLoginRedirect, shouldRedirectToOnboarding } from '@/lib/auth/redirect';
-import { 
-    isDevModeEnabled, 
-    getDevUserType, 
+import {
+    isDevModeEnabled,
+    getDevUserType,
     getMockUserData,
     clearDevMode,
-    DevUserType 
+    DevUserType
 } from '@/lib/dev/dev-mode';
 
 interface ProtectedRouteProps {
@@ -29,10 +29,10 @@ interface ProtectedRouteProps {
  * - Role-based access control (optional)
  * - Onboarding status check (optional)
  */
-export function ProtectedRoute({ 
-    children, 
+export function ProtectedRoute({
+    children,
     requiredRole,
-    requireOnboardingComplete = false 
+    requireOnboardingComplete = false
 }: ProtectedRouteProps) {
     const router = useRouter();
     const pathname = usePathname();
@@ -44,7 +44,7 @@ export function ProtectedRoute({
         if (isDevModeEnabled()) {
             const devUserType = getDevUserType();
             const mockUser = getMockUserData(devUserType);
-            
+
             if (mockUser) {
                 // Validate dev user against route requirements
                 if (requiredRole && mockUser.role !== requiredRole) {
@@ -82,7 +82,7 @@ export function ProtectedRoute({
             try {
                 // Fetch user document
                 const userDoc = await getDoc(doc(db, 'users', user.id));
-                
+
                 if (!userDoc.exists()) {
                     // User document doesn't exist - likely new user, create it
                     console.warn('User document not found, redirecting to onboarding');
@@ -106,20 +106,24 @@ export function ProtectedRoute({
                     return;
                 }
 
+                // Determine effective onboarding status (Lead Capture counts as base onboarding)
+                // Legacy support: if onboardingComplete is true, lead capture is effectively done
+                const isLeadCaptureDone = userData.leadCaptureComplete || userData.onboardingComplete;
+
                 // Check onboarding requirement for clients
-                if (userData.role === 'client' && requireOnboardingComplete && !userData.onboardingComplete) {
-                    router.replace('/onboarding');
+                if (userData.role === 'client' && requireOnboardingComplete && !isLeadCaptureDone) {
+                    router.replace('/get-started');
                     return;
                 }
 
-                // Check if client with incomplete onboarding is on wrong page
+                // Check if client with incomplete lead capture is on wrong page
+                // They should be on /get-started
                 if (
-                    userData.role === 'client' && 
-                    !userData.onboardingComplete && 
-                    pathname !== '/onboarding' &&
-                    !pathname.startsWith('/onboarding')
+                    userData.role === 'client' &&
+                    !isLeadCaptureDone &&
+                    pathname !== '/get-started'
                 ) {
-                    router.replace('/onboarding');
+                    router.replace('/get-started');
                     return;
                 }
 
@@ -166,7 +170,7 @@ export function withAuth<P extends object>(
 ) {
     return function WithAuthComponent(props: P) {
         return (
-            <ProtectedRoute 
+            <ProtectedRoute
                 requiredRole={options?.requiredRole}
                 requireOnboardingComplete={options?.requireOnboardingComplete}
             >
@@ -187,7 +191,7 @@ export function useUser() {
     useEffect(() => {
         const unsubscribe = authService.onAuthStateChanged(async (authUser) => {
             setUser(authUser);
-            
+
             if (authUser) {
                 try {
                     const userDoc = await getDoc(doc(db, 'users', authUser.id));
@@ -200,7 +204,7 @@ export function useUser() {
             } else {
                 setUserData(null);
             }
-            
+
             setLoading(false);
         });
 

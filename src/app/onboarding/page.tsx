@@ -38,7 +38,7 @@ export default function OnboardingPage() {
                                 className="h-8 w-auto"
                             />
                             <div className="h-8 w-[1px] bg-gray-200 mx-1"></div>
-                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide pt-0.5">Client Onboarding</p>
+                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide pt-0.5">Project Setup</p>
                         </div>
                         <button className="text-sm text-gray-600 hover:text-gray-900">
                             Save & Continue Later
@@ -53,16 +53,15 @@ export default function OnboardingPage() {
                     {/* Welcome Message */}
                     <div className="text-center mb-8">
                         <h2 className="text-4xl font-bold text-gray-900 mb-3">
-                            Welcome to SEOJack! 🎉
+                            Tell Us About Your Dream Website 🎨
                         </h2>
                         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                            Let's build you a website that actually brings in customers. This takes about 5 minutes,
-                            and you can save & continue anytime.
+                            Help us design the perfect site for your business. This is optional but helps us get it right the first time.
                         </p>
                     </div>
 
                     {/* Wizard */}
-                    <Wizard />
+                    <Wizard mode="project-setup" />
                 </div>
             </main>
 

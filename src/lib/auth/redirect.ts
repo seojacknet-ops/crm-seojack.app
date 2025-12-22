@@ -20,9 +20,9 @@ export function getPostLoginRedirect(userData: UserDocument | null, requestedRed
         return requestedRedirect;
     }
 
-    // New users (haven't completed onboarding) go to onboarding
-    if (!userData.onboardingComplete) {
-        return '/onboarding';
+    // New users (haven't completed lead capture) go to lead capture page
+    if (!userData.leadCaptureComplete) {
+        return '/get-started';
     }
 
     // Returning users go to main dashboard
@@ -66,6 +66,6 @@ export function getDashboardRoute(userData: UserDocument | null): string {
 export function shouldRedirectToOnboarding(userData: UserDocument | null): boolean {
     if (!userData) return false;
     if (userData.role === 'admin') return false;
-    return !userData.onboardingComplete;
+    return !userData.leadCaptureComplete;
 }
 

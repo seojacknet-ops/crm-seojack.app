@@ -194,28 +194,51 @@ function DashboardContent() {
             <div className="lg:col-span-8 space-y-6">
 
               {/* Next Action Card - Refined & Clean */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all relative overflow-hidden group">
-                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-brand-purple"></div>
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="bg-brand-purple/10 text-brand-purple text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
-                        Action Required
-                      </span>
-                      <span className="text-gray-400 text-sm flex items-center">
-                        <Clock className="w-3.5 h-3.5 mr-1" /> Due in 2 days
-                      </span>
+              {/* If full onboarding not complete, show Project Setup CTA */}
+              {projectPhase === "Onboarding" ? (
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all relative overflow-hidden group">
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-brand-purple"></div>
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="bg-brand-purple/10 text-brand-purple text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
+                          Start Here
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-gray-900 text-xl mb-2">Tell Us About Your Dream Website</h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        We have your basics, but defining your vision helps us build exactly what you want.
+                      </p>
                     </div>
-                    <h3 className="font-bold text-gray-900 text-xl mb-2">Review Design Draft v1</h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      The first look at your homepage is ready. Please review the layout and leave your feedback so we can move to development.
-                    </p>
+                    <Link href="/onboarding" className="bg-brand-purple text-white px-8 py-3.5 rounded-xl font-medium hover:bg-brand-purple-dark transition-all shadow-lg shadow-brand-purple/20 flex items-center whitespace-nowrap group-hover:scale-105">
+                      Start Project Setup <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Link>
                   </div>
-                  <button className="bg-brand-purple text-white px-8 py-3.5 rounded-xl font-medium hover:bg-brand-purple-dark transition-all shadow-lg shadow-brand-purple/20 flex items-center whitespace-nowrap group-hover:scale-105">
-                    View Draft <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </button>
                 </div>
-              </div>
+              ) : (
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-all relative overflow-hidden group">
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-brand-purple"></div>
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="bg-brand-purple/10 text-brand-purple text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
+                          Action Required
+                        </span>
+                        <span className="text-gray-400 text-sm flex items-center">
+                          <Clock className="w-3.5 h-3.5 mr-1" /> Due in 2 days
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-gray-900 text-xl mb-2">Review Design Draft v1</h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        The first look at your homepage is ready. Please review the layout and leave your feedback so we can move to development.
+                      </p>
+                    </div>
+                    <button className="bg-brand-purple text-white px-8 py-3.5 rounded-xl font-medium hover:bg-brand-purple-dark transition-all shadow-lg shadow-brand-purple/20 flex items-center whitespace-nowrap group-hover:scale-105">
+                      View Draft <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Two Column Grid for Analytics and Activity */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

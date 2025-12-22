@@ -4,7 +4,15 @@ import React from 'react'
 import { useOnboardingStore } from '@/lib/store/onboarding-store'
 import { INDUSTRIES, INDUSTRY_CONFIGS } from '@/lib/config/industry-defaults'
 
-export const Step1BusinessInfo = () => {
+interface Step1Props {
+    title?: string;
+    subtitle?: string;
+}
+
+export const Step1BusinessInfo = ({
+    title = "Let's Get Acquainted 👋",
+    subtitle = "First things first - tell us about your business."
+}: Step1Props) => {
     const { data, updateBusinessInfo } = useOnboardingStore()
     const { businessInfo } = data
 
@@ -12,9 +20,9 @@ export const Step1BusinessInfo = () => {
     return (
         <div className="space-y-8 animate-fade-in">
             <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">Let's Get Acquainted 👋</h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">{title}</h2>
                 <p className="text-gray-600">
-                    First things first - tell us about your business. This takes about 5 minutes.
+                    {subtitle}
                 </p>
             </div>
 

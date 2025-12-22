@@ -23,10 +23,20 @@ const STEP_CONFIG = [
     { id: 6, title: 'The Finish Line', subtitle: 'Goals and timeline' },
 ]
 
-export const Wizard = () => {
+interface WizardProps {
+    mode?: 'full' | 'project-setup'
+}
+
+export const Wizard = ({ mode = 'full' }: WizardProps) => {
     const { currentStep, setStep, nextStep, prevStep, data } = useOnboardingStore()
     const router = useRouter()
     const totalSteps = 6
+
+    React.useEffect(() => {
+        if (mode === 'project-setup' && currentStep === 1) {
+            setStep(2)
+        }
+    }, [mode, currentStep, setStep])
 
     const renderStep = () => {
         switch (currentStep) {
@@ -140,28 +150,32 @@ export const Wizard = () => {
 
                 {/* Step indicators */}
                 <div className="mt-4 flex justify-between">
-                    {STEP_CONFIG.map((step) => (
-                        <div
-                            key={step.id}
-                            className={`flex-1 text-center ${step.id < currentStep
-                                ? 'text-brand-purple'
-                                : step.id === currentStep
-                                    ? 'text-brand-purple font-semibold'
-                                    : 'text-gray-300'
-                                }`}
-                        >
+                    {STEP_CONFIG.map((step) => {
+                        if (mode === 'project-setup' && step.id === 1) return null;
+
+                        return (
                             <div
-                                className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center text-xs font-bold ${step.id < currentStep
-                                    ? 'bg-brand-purple text-white'
+                                key={step.id}
+                                className={`flex-1 text-center ${step.id < currentStep
+                                    ? 'text-brand-purple'
                                     : step.id === currentStep
-                                        ? 'bg-brand-purple text-white ring-4 ring-brand-purple/20'
-                                        : 'bg-gray-200 text-gray-400'
+                                        ? 'text-brand-purple font-semibold'
+                                        : 'text-gray-300'
                                     }`}
                             >
-                                {step.id < currentStep ? '✓' : step.id}
+                                <div
+                                    className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center text-xs font-bold ${step.id < currentStep
+                                        ? 'bg-brand-purple text-white'
+                                        : step.id === currentStep
+                                            ? 'bg-brand-purple text-white ring-4 ring-brand-purple/20'
+                                            : 'bg-gray-200 text-gray-400'
+                                        }`}
+                                >
+                                    {step.id < currentStep ? '✓' : step.id}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        )
+                    })}
                 </div>
             </div>
 
@@ -172,10 +186,10 @@ export const Wizard = () => {
             <div className="flex justify-between mt-6 bg-white rounded-2xl shadow-sm p-6">
                 <button
                     onClick={prevStep}
-                    disabled={currentStep === 1}
-                    className={`flex items-center px-6 py-3 rounded-lg text-sm font-medium transition-all ${currentStep === 1
-                        ? 'text-gray-300 cursor-not-allowed'
-                        : 'text-gray-700 hover:bg-gray-50 border-2 border-gray-200'
+                    disabled={currentStep === 1 || (mode === 'project-setup' && currentStep === 2)}
+                    className={`flex items-center px-6 py-3 rounded-lg text-sm font-medium transition-all ${currentStep === 1 || (mode === 'project-setup' && currentStep === 2)
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-gray-700 hover:bg-gray-50 border-2 border-gray-200'
                         }`}
                 >
                     <ChevronLeft className="w-4 h-4 mr-2" />

@@ -256,9 +256,11 @@ function LoginPageContent() {
                     <div className="mt-16 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/10">
                         <p className="text-white/90 italic">"SEOJack transformed our online presence. Within a week we had a stunning website that actually brings in leads!"</p>
                         <div className="mt-4 flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-purple-400 flex items-center justify-center text-white font-bold">
-                                M
-                            </div>
+                            <img
+                                src="/testimonials/mike-johnson.png"
+                                alt="Mike Johnson"
+                                className="w-10 h-10 rounded-full object-cover border-2 border-white/20"
+                            />
                             <div>
                                 <p className="text-white font-medium text-sm">Mike Johnson</p>
                                 <p className="text-purple-300 text-xs">Johnson's Plumbing Services</p>

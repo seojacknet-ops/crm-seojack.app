@@ -68,7 +68,7 @@ export const Sidebar = () => {
                 <button
                     onClick={async () => {
                         await signOut();
-                        window.location.href = 'https://seojack.net';
+                        window.location.href = 'https://seojack.website';
                     }}
                     className="w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-colors"
                 >

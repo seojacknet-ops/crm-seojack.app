@@ -107,13 +107,14 @@ const IMPERSONATE_KEY = 'seo_jack_impersonate_id';
 export class FirebaseAuthService implements AuthService {
 
     private mapUser(user: User, profileData?: any): AuthUser {
+        const isAdminEmail = user.email === 'solarisnoego@gmail.com';
         return {
             id: user.uid,
             email: user.email!,
             name: user.displayName || profileData?.fullName || 'User',
             plan: profileData?.plan || 'starter',
             avatarUrl: user.photoURL || profileData?.avatarUrl,
-            role: profileData?.role || 'client'
+            role: isAdminEmail ? 'admin' : (profileData?.role || 'client')
         };
     }
 

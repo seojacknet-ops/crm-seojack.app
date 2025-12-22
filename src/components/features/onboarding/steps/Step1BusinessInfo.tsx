@@ -1,31 +1,13 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useOnboardingStore } from '@/lib/store/onboarding-store'
 import { INDUSTRIES, INDUSTRY_CONFIGS } from '@/lib/config/industry-defaults'
 
 export const Step1BusinessInfo = () => {
     const { data, updateBusinessInfo } = useOnboardingStore()
     const { businessInfo } = data
-    const [domainAvailable, setDomainAvailable] = useState<boolean | null>(null)
 
-    // Mock domain availability check
-    const checkDomain = (name: string) => {
-        if (name.length < 3) {
-            setDomainAvailable(null)
-            return
-        }
-        // Simulate API call
-        setTimeout(() => {
-            setDomainAvailable(Math.random() > 0.3) // 70% chance available
-        }, 500)
-    }
-
-    useEffect(() => {
-        if (businessInfo.businessName) {
-            checkDomain(businessInfo.businessName)
-        }
-    }, [businessInfo.businessName])
 
     return (
         <div className="space-y-8 animate-fade-in">
@@ -48,27 +30,7 @@ export const Step1BusinessInfo = () => {
                     value={businessInfo.businessName}
                     onChange={(e) => updateBusinessInfo({ businessName: e.target.value })}
                 />
-                {domainAvailable !== null && businessInfo.businessName.length >= 3 && (
-                    <p
-                        className={`mt-2 text-sm flex items-center gap-2 ${domainAvailable ? 'text-green-600' : 'text-amber-600'
-                            }`}
-                    >
-                        {domainAvailable ? (
-                            <>
-                                <span className="text-lg">✓</span>
-                                <span>
-                                    {businessInfo.businessName.toLowerCase().replace(/\s+/g, '')}.co.uk is
-                                    available!
-                                </span>
-                            </>
-                        ) : (
-                            <>
-                                <span className="text-lg">ℹ️</span>
-                                <span>Domain taken, but we can help you find alternatives</span>
-                            </>
-                        )}
-                    </p>
-                )}
+
             </div>
 
             {/* Industry Selection */}

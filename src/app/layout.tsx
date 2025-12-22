@@ -12,11 +12,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 export const metadata: Metadata = {
   title: "SEOJack Client Hub",
   description: "Your digital concierge for web design.",
-  icons: {
-    icon: '/icon.png',
-    shortcut: '/favicon.ico',
-    apple: '/apple-icon.png',
-  },
+
 };
 
 import { Toaster } from "@/components/ui/sonner";

@@ -201,9 +201,9 @@ function LoginPageContent() {
                     {/* Logo */}
                     <div className="mb-12">
                         <img
-                            src="/seojack-digital-marketing-logo-1025-506d8cee.webp"
+                            src="/seojack_login.png"
                             alt="SEOJack"
-                            className="h-12 w-auto"
+                            className="h-12 w-auto mb-8"
                         />
                         <h1 className="text-white text-3xl font-bold mt-6">Your Path to a <br />Premium Website</h1>
                         <p className="text-purple-200 mt-2 text-lg">It's easier than you think.</p>

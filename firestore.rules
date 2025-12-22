@@ -22,6 +22,10 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if isOwner(userId) || isAdmin();
     }
+
+    match /onboarding/{userId} {
+      allow read, write: if isOwner(userId) || isAdmin();
+    }
     
     match /notifications/{notificationId} {
       allow read: if isOwner(resource.data.userId) || isAdmin();

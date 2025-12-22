@@ -17,11 +17,11 @@ import { authService } from '@/services/auth';
 import { db } from '@/lib/firebase/client';
 import { getPostLoginRedirect } from '@/lib/auth/redirect';
 import { UserDocument } from '@/lib/schemas/firebase';
-import { 
-    isDevelopment, 
-    setDevUserType, 
+import {
+    isDevelopment,
+    setDevUserType,
     getDevRedirectPath,
-    DevUserType 
+    DevUserType
 } from '@/lib/dev/dev-mode';
 
 // Validation schemas
@@ -42,7 +42,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 function LoginPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    
+
     const [isLoading, setIsLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
     const [checkingAuth, setCheckingAuth] = useState(true);
@@ -113,7 +113,7 @@ function LoginPageContent() {
         try {
             const user = await authService.login(data);
             toast.success('Welcome back!');
-            
+
             // Fetch user document to determine redirect
             const userDoc = await getDoc(doc(db, 'users', user.id));
             const userData = userDoc.exists() ? userDoc.data() as UserDocument : null;
@@ -138,7 +138,7 @@ function LoginPageContent() {
         try {
             await authService.register(data);
             toast.success('Account created! Let\'s get you set up.');
-            
+
             // New users always go to onboarding
             router.replace('/onboarding');
         } catch (error: any) {
@@ -158,18 +158,13 @@ function LoginPageContent() {
         try {
             const user = await authService.loginWithGoogle();
             toast.success('Signed in with Google!');
-            
+
             // Fetch user document to determine redirect
             const userDoc = await getDoc(doc(db, 'users', user.id));
             const userData = userDoc.exists() ? userDoc.data() as UserDocument : null;
-            
-            // If new Google user, they need onboarding
-            if (!userData || !userData.onboardingComplete) {
-                router.replace('/onboarding');
-            } else {
-                const destination = getPostLoginRedirect(userData, redirectTo || undefined);
-                router.replace(destination);
-            }
+
+            const destination = getPostLoginRedirect(userData, redirectTo || undefined);
+            router.replace(destination);
         } catch (error: any) {
             console.error('Google auth error:', error);
             toast.error(error.message || 'Failed to sign in with Google');
@@ -199,7 +194,7 @@ function LoginPageContent() {
                     <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl" />
                     <div className="absolute bottom-20 right-20 w-96 h-96 bg-pink-400 rounded-full blur-3xl" />
                 </div>
-                
+
                 <div className="relative z-10 flex flex-col justify-center px-16 py-12">
                     {/* Logo */}
                     <div className="mb-12">
@@ -279,21 +274,19 @@ function LoginPageContent() {
                     <div className="flex bg-gray-100 rounded-xl p-1 mb-8">
                         <button
                             onClick={() => setActiveTab('login')}
-                            className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all ${
-                                activeTab === 'login'
+                            className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all ${activeTab === 'login'
                                     ? 'bg-white text-gray-900 shadow-sm'
                                     : 'text-gray-500 hover:text-gray-700'
-                            }`}
+                                }`}
                         >
                             Sign In
                         </button>
                         <button
                             onClick={() => setActiveTab('register')}
-                            className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all ${
-                                activeTab === 'register'
+                            className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all ${activeTab === 'register'
                                     ? 'bg-white text-gray-900 shadow-sm'
                                     : 'text-gray-500 hover:text-gray-700'
-                            }`}
+                                }`}
                         >
                             Create Account
                         </button>
@@ -536,7 +529,7 @@ function LoginPageContent() {
                                     <p className="text-xs text-gray-400 text-center font-medium">
                                         Skip auth & enter as:
                                     </p>
-                                    
+
                                     <button
                                         onClick={() => handleDevLogin('new_user')}
                                         className="w-full flex items-center gap-3 px-4 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors group"

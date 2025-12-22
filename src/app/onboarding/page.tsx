@@ -2,14 +2,24 @@
 
 import React from "react"
 import { Wizard } from "@/components/features/onboarding/Wizard"
+import { useAuth } from "@/hooks/useAuth"
+import { useRouter } from "next/navigation"
 
 export default function OnboardingPage() {
+    const { user, userData, loading } = useAuth()
+    const router = useRouter()
     const [mounted, setMounted] = React.useState(false)
 
     // Prevent hydration mismatch for persisted state
     React.useEffect(() => {
         setMounted(true)
     }, [])
+
+    React.useEffect(() => {
+        if (!loading && userData?.role === 'admin') {
+            router.replace('/admin')
+        }
+    }, [loading, userData, router])
 
     if (!mounted) {
         return null

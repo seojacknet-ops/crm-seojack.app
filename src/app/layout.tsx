@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { AuthProvider } from "@/hooks/useAuth";
 import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
@@ -37,12 +38,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <DevModeBanner />
-          <ImpersonationBanner />
-          <AppShell>
-            {children}
-          </AppShell>
-          <Toaster position="bottom-right" />
+          <AuthProvider>
+            <DevModeBanner />
+            <ImpersonationBanner />
+            <AppShell>
+              {children}
+            </AppShell>
+            <Toaster position="bottom-right" />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

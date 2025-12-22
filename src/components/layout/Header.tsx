@@ -10,11 +10,13 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { navItems } from "@/components/layout/Sidebar";
 import { authService, AuthUser } from '@/services/auth';
+import { useAuth } from '@/hooks/useAuth';
 import { notificationService } from '@/services/notification.service';
 import { NotificationDocument } from '@/lib/schemas/firebase';
 
 export const Header = () => {
     const pathname = usePathname();
+    const { signOut } = useAuth();
     const [user, setUser] = useState<AuthUser | null>(null);
     const [notifications, setNotifications] = useState<NotificationDocument[]>([]);
     const [showNotifications, setShowNotifications] = useState(false);
@@ -115,7 +117,13 @@ export const Header = () => {
                                     <Settings className="w-5 h-5 mr-3 text-muted-foreground" />
                                     Settings
                                 </Link>
-                                <button className="w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-colors">
+                                <button
+                                    onClick={async () => {
+                                        await signOut();
+                                        window.location.href = 'https://seojack.net';
+                                    }}
+                                    className="w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-colors"
+                                >
                                     <LogOut className="w-5 h-5 mr-3" />
                                     Log Out
                                 </button>

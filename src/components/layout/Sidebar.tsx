@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 import { Home, Globe, MessageSquare, HardDrive, CreditCard, Settings, LogOut, BarChart2, LifeBuoy } from 'lucide-react';
 
 export const navItems = [
@@ -17,6 +18,7 @@ export const navItems = [
 
 export const Sidebar = () => {
     const pathname = usePathname();
+    const { signOut } = useAuth();
 
     return (
         <aside className="hidden md:flex flex-col w-64 bg-background border-r border-border h-screen fixed left-0 top-0 z-40">
@@ -63,7 +65,13 @@ export const Sidebar = () => {
                     <Settings className="w-5 h-5 mr-3 text-muted-foreground group-hover:text-foreground" />
                     Settings
                 </Link>
-                <button className="w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-colors">
+                <button
+                    onClick={async () => {
+                        await signOut();
+                        window.location.href = 'https://seojack.net';
+                    }}
+                    className="w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-500/10 transition-colors"
+                >
                     <LogOut className="w-5 h-5 mr-3" />
                     Log Out
                 </button>

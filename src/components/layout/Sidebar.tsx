@@ -22,10 +22,13 @@ export const Sidebar = () => {
         <aside className="hidden md:flex flex-col w-64 bg-background border-r border-border h-screen fixed left-0 top-0 z-40">
             {/* Logo Area */}
             <div className="p-6 border-b border-border">
-                <h1 className="text-2xl font-bold tracking-tight">
-                    <span className="text-foreground">SEO</span>
-                    <span className="bg-gradient-to-r from-brand-purple to-accent-pink bg-clip-text text-transparent">Jack</span>
-                </h1>
+                <div className="p-6 border-b border-border">
+                    <img
+                        src="/seojack-logo-dark.png"
+                        alt="SEOJack"
+                        className="h-8 w-auto"
+                    />
+                </div>
             </div>
 
             {/* Navigation */}

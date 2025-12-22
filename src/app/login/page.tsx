@@ -198,10 +198,12 @@ function LoginPageContent() {
                 <div className="relative z-10 flex flex-col justify-center px-16 py-12">
                     {/* Logo */}
                     <div className="mb-12">
-                        <h1 className="text-4xl font-bold text-white tracking-tight">
-                            SEO<span className="text-pink-300">Jack</span>
-                        </h1>
-                        <p className="text-purple-200 mt-1">Client Portal</p>
+                        <img
+                            src="/seojack-logo-dark.png"
+                            alt="SEOJack"
+                            className="h-12 w-auto brightness-0 invert"
+                        />
+                        <p className="text-purple-200 mt-3 font-medium">Client Portal</p>
                     </div>
 
                     {/* Value Props */}
@@ -263,11 +265,13 @@ function LoginPageContent() {
             <div className="flex-1 flex items-center justify-center p-8">
                 <div className="w-full max-w-md">
                     {/* Mobile Logo */}
-                    <div className="lg:hidden text-center mb-8">
-                        <h1 className="text-3xl font-bold text-brand-purple">
-                            SEO<span className="text-pink-500">Jack</span>
-                        </h1>
-                        <p className="text-gray-500 text-sm mt-1">Client Portal</p>
+                    <div className="lg:hidden text-center mb-8 flex flex-col items-center">
+                        <img
+                            src="/seojack-logo-dark.png"
+                            alt="SEOJack"
+                            className="h-10 w-auto mb-2"
+                        />
+                        <p className="text-gray-500 text-sm">Client Portal</p>
                     </div>
 
                     {/* Tab Switcher */}
@@ -275,8 +279,8 @@ function LoginPageContent() {
                         <button
                             onClick={() => setActiveTab('login')}
                             className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all ${activeTab === 'login'
-                                    ? 'bg-white text-gray-900 shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-700'
+                                ? 'bg-white text-gray-900 shadow-sm'
+                                : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
                             Sign In
@@ -284,8 +288,8 @@ function LoginPageContent() {
                         <button
                             onClick={() => setActiveTab('register')}
                             className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all ${activeTab === 'register'
-                                    ? 'bg-white text-gray-900 shadow-sm'
-                                    : 'text-gray-500 hover:text-gray-700'
+                                ? 'bg-white text-gray-900 shadow-sm'
+                                : 'text-gray-500 hover:text-gray-700'
                                 }`}
                         >
                             Create Account

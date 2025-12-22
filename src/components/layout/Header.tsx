@@ -79,8 +79,11 @@ export const Header = () => {
                         <div className="flex flex-col h-full bg-background">
                             <div className="p-6 border-b border-border">
                                 <h1 className="text-2xl font-bold tracking-tight">
-                                    <span className="text-foreground">SEO</span>
-                                    <span className="bg-gradient-to-r from-brand-purple to-accent-pink bg-clip-text text-transparent">Jack</span>
+                                    <img
+                                        src="/seojack-logo-dark.png"
+                                        alt="SEOJack"
+                                        className="h-8 w-auto"
+                                    />
                                 </h1>
                             </div>
                             <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -180,8 +183,8 @@ export const Header = () => {
                                         >
                                             <div className="flex justify-between items-start mb-1">
                                                 <span className={`text-xs font-medium px-1.5 py-0.5 rounded ${notif.type === 'message' ? 'bg-purple-100 text-purple-600' :
-                                                        notif.type === 'billing' ? 'bg-green-100 text-green-600' :
-                                                            'bg-gray-100 text-gray-600'
+                                                    notif.type === 'billing' ? 'bg-green-100 text-green-600' :
+                                                        'bg-gray-100 text-gray-600'
                                                     }`}>
                                                     {notif.type.charAt(0).toUpperCase() + notif.type.slice(1)}
                                                 </span>
